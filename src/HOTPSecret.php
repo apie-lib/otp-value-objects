@@ -32,6 +32,16 @@ class HOTPSecret implements ValueObjectInterface
         return new self(HOTP::create());
     }
 
+    public function getSecret(): string
+    {
+        return $this->secret;
+    }
+
+    public function getCounter(): string
+    {
+        return $this->counter;
+    }
+
     private function validateState(): void
     {
         $errors = [];

@@ -30,7 +30,6 @@ class HOTPSecretTest extends TestCase
     public function it_can_validate_input(array $expected, array $input)
     {
         try {
-            var_dump($input);
             HOTPSecret::fromNative($input);
             $this->fail('fromNative should have thrown an exception');
         } catch (ValidationException $validationException) {
@@ -41,13 +40,42 @@ class HOTPSecretTest extends TestCase
 
     public function invalidProvider()
     {
-        $valid = HOTPSecret::createRandom()->toNative();
-        yield 'empty array' => [['counter' => 'Type "(missing value)" is not expected, expected int', 'secret' => 'Type "(missing value)" is not expected, expected string'], []];
-        yield 'counter negative' => [['counter' => 'Counter should higher than or equal to 0'], ['count' => -1, 'secret' => $valid]];
-        yield 'secret invalid' => [['secret' => 'Secret is not in valid format'], ['count' => 1, 'secret' => $valid]];
-        yield 'merging together gives more results then the timeline ' =>[
-            ['counter' => 'Counter should higher than or equal to 0', 'secret' => 'Secret is not in valid format'],
-            ['counter' => -1, 'secret' => $valid]];
+        $validSecret = HOTPSecret::createRandom()->getSecret();
+        yield 'empty array' => [
+            [
+                'counter' => 'Type "(missing value)" is not expected, expected int',
+                'secret' => 'Type "(missing value)" is not expected, expected string'
+            ],
+            []
+        ];
+        yield 'counter negative' => [
+            [
+                'counter' => 'Counter should higher than or equal to 0'
+            ],
+            [
+                'counter' => -1,
+                'secret' => $validSecret
+            ]
+        ];
+        yield 'secret invalid' => [
+            [
+                'secret' => 'Secret is not in valid format'
+            ],
+            [
+                'counter' => 1,
+                'secret' => 'invalid'
+            ]
+        ];
+        yield 'both values are incorrect' => [
+            [
+                'counter' => 'Counter should higher than or equal to 0',
+                'secret' => 'Secret is not in valid format'
+            ],
+            [
+                'counter' => -1,
+                'secret' => 'invalid'
+            ]
+        ];
     }
 
     /**

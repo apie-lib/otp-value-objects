@@ -4,7 +4,6 @@ namespace Apie\OtpValueObjects;
 use Apie\Core\Attributes\FakeMethod;
 use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
-use Apie\Core\ValueObjects\IsStringValueObject;
 use Apie\Core\ValueObjects\IsStringWithRegexValueObject;
 use Apie\OtpValueObjects\Concerns\NoIndexing;
 use OTPHP\TOTP;
