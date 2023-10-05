@@ -2,6 +2,7 @@
 namespace Apie\OtpValueObjects;
 
 use Apie\Core\Attributes\ProvideIndex;
+use Apie\Core\Entities\EntityInterface;
 use ReflectionProperty;
 
 /**
@@ -16,5 +17,5 @@ abstract class VerifyOTP extends OTP
      */
     abstract public static function getOtpReference(): ReflectionProperty;
 
-    abstract public static function getOtpLabel(): string;
+    abstract public static function getOtpLabel(EntityInterface $entity): string;
 }
