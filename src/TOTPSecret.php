@@ -6,6 +6,7 @@ use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
 use Apie\Core\ValueObjects\IsStringWithRegexValueObject;
 use Apie\OtpValueObjects\Concerns\NoIndexing;
+use chillerlan\QRCode\QRCode;
 use OTPHP\TOTP;
 
 #[FakeMethod('createRandom')]
@@ -29,6 +30,13 @@ class TOTPSecret implements StringValueObjectInterface
     public static function getRegularExpression(): string
     {
         return '/^[A-Z0-9]{103}$/';
+    }
+
+    public function getUrl(string $label): string
+    {
+        $tmp = TOTP::create($this->internal);
+        $tmp->setLabel($label);
+        return (new QRCode)->render($tmp->getProvisioningUri());
     }
 
     public function verify(OTP $otp): bool
