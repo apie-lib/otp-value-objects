@@ -50,6 +50,16 @@ class HOTPSecret implements ValueObjectInterface
         return (new QRCode)->render($tmp->getProvisioningUri());
     }
 
+    public function getQrCodeUri(string $label): string
+    {
+        $tmp = HOTP::create($this->secret, $this->counter);
+        $tmp->setLabel($label);
+        return $tmp->getQrCodeUri(
+            'https://api.qrserver.com/v1/create-qr-code/?data=[DATA]&size=300x300&ecc=M',
+            '[DATA]'
+        );
+    }
+
     private function validateState(): void
     {
         $errors = [];

@@ -39,6 +39,16 @@ class TOTPSecret implements StringValueObjectInterface
         return (new QRCode)->render($tmp->getProvisioningUri());
     }
 
+    public function getQrCodeUri(string $label): string
+    {
+        $tmp = TOTP::create($this->internal);
+        $tmp->setLabel($label);
+        return $tmp->getQrCodeUri(
+            'https://api.qrserver.com/v1/create-qr-code/?data=[DATA]&size=300x300&ecc=M',
+            '[DATA]'
+        );
+    }
+
     public function verify(OTP $otp): bool
     {
         // Use OTPHP library to generate a TOTP and compare it with the inputOTP
