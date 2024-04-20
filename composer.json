@@ -29,6 +29,13 @@
     "phpunit/phpunit": "^9.5",
     "phpspec/prophecy-phpunit": "^2.0"
   },
+  "extra": {
+    "apie-objects": [
+      "Apie\\OtpValueObjects\\HOTPSecret",
+      "Apie\\OtpValueObjects\\OTP",
+      "Apie\\OtpValueObjects\\TOTPSecret"
+    ]
+  },
   "minimum-stability": "dev",
   "prefer-stable": true
 }
