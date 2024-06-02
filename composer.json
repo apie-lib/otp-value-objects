@@ -32,6 +32,9 @@
     "phpunit/phpunit": "^9.5",
     "phpspec/prophecy-phpunit": "^2.0"
   },
+  "conflict": {
+    "thecodingmachine/safe": "1.*"
+  },
   "extra": {
     "apie-objects": [
       "Apie\\OtpValueObjects\\HOTPSecret",
