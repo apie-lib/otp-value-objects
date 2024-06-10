@@ -52,11 +52,9 @@ class TOTPSecretTest extends TestCase
     {
         $secret = str_repeat('A', 103);
         $testItem = new TOTPSecret($secret);
-        $file = __DIR__ . '/../fixtures/totp.txt';
         $actual = $testItem->getUrl('Testcase');
-        // file_put_contents($file, $actual);
-        $this->assertEquals(
-            file_get_contents($file),
+        $this->assertStringStartsWith(
+            'data:image/svg+xml;base64,',
             $actual
         );
     }

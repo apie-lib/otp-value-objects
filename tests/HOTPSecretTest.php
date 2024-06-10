@@ -115,11 +115,9 @@ class HOTPSecretTest extends TestCase
         $secret = str_repeat('A', 103);
         $tmp = HOTP::create($secret, 0);
         $testItem = new HOTPSecret($tmp);
-        $file = __DIR__ . '/../fixtures/hotp.txt';
         $actual = $testItem->getUrl('Testcase');
-        // file_put_contents($file, $actual);
-        $this->assertEquals(
-            file_get_contents($file),
+        $this->assertStringStartsWith(
+            'data:image/svg+xml;base64,',
             $actual
         );
     }

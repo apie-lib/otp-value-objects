@@ -23,7 +23,7 @@
     "php": ">=8.1",
     "apie/core": "self.version",
     "apie/serializer": "self.version",
-    "chillerlan/php-qrcode": "^5.0",
+    "chillerlan/php-qrcode": "^5.0.2",
     "spomky-labs/otphp": "^11.2.2"
   },
   "require-dev": {
