@@ -1,8 +1,11 @@
 <?php
 namespace Apie\Tests\OtpValueObjects;
 
+use Apie\Core\ApieLib;
 use Apie\Fixtures\TestHelpers\TestWithFaker;
 use Apie\OtpValueObjects\TOTPSecret;
+use Beste\Clock\FrozenClock;
+use Beste\Clock\SystemClock;
 use PHPUnit\Framework\TestCase;
 
 class TOTPSecretTest extends TestCase
@@ -13,9 +16,13 @@ class TOTPSecretTest extends TestCase
      */
     public function it_can_create_and_verify_an_otp()
     {
+        $clock = FrozenClock::withNowFrom(SystemClock::create());
+        ApieLib::setPsrClock($clock);
         $testItem = TOTPSecret::createRandom();
         $otp = $testItem->createOTP();
         $this->assertTrue($testItem->verify($otp));
+        $clock->setTo($clock->now()->modify('+5 minutes'));
+        $this->assertFalse($testItem->verify($otp));
     }
 
     /**
@@ -23,6 +30,8 @@ class TOTPSecretTest extends TestCase
      */
     public function it_can_fake_totp_secrets()
     {
+        $clock = FrozenClock::withNowFrom(SystemClock::create());
+        ApieLib::setPsrClock($clock);
         $this->runFakerTest(
             TOTPSecret::class,
             function (TOTPSecret $instance) {
@@ -37,6 +46,8 @@ class TOTPSecretTest extends TestCase
      */
     public function it_can_provide_a_url_from_qrserver()
     {
+        $clock = FrozenClock::withNowFrom(SystemClock::create());
+        ApieLib::setPsrClock($clock);
         $secret = str_repeat('A', 103);
         $testItem = new TOTPSecret($secret);
         $this->assertEquals(
@@ -50,6 +61,8 @@ class TOTPSecretTest extends TestCase
      */
     public function it_can_provide_a_base64_image()
     {
+        $clock = FrozenClock::withNowFrom(SystemClock::create());
+        ApieLib::setPsrClock($clock);
         $secret = str_repeat('A', 103);
         $testItem = new TOTPSecret($secret);
         $actual = $testItem->getUrl('Testcase');

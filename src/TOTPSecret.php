@@ -1,6 +1,7 @@
 <?php
 namespace Apie\OtpValueObjects;
 
+use Apie\Core\ApieLib;
 use Apie\Core\Attributes\FakeMethod;
 use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
@@ -18,13 +19,13 @@ class TOTPSecret implements StringValueObjectInterface
 
     public static function createRandom(): self
     {
-        $totp = TOTP::create();
+        $totp = TOTP::create(clock: ApieLib::getPsrClock());
         return new self($totp->getSecret());
     }
 
     public function createOTP(): OTP
     {
-        return new OTP(TOTP::create($this->internal)->now());
+        return new OTP(TOTP::create($this->internal, clock: ApieLib::getPsrClock())->now());
     }
 
     public static function getRegularExpression(): string
@@ -34,14 +35,14 @@ class TOTPSecret implements StringValueObjectInterface
 
     public function getUrl(string $label): string
     {
-        $tmp = TOTP::create($this->internal);
+        $tmp = TOTP::create($this->internal, clock: ApieLib::getPsrClock());
         $tmp->setLabel($label);
         return (new QRCode)->render($tmp->getProvisioningUri());
     }
 
     public function getQrCodeUri(string $label): string
     {
-        $tmp = TOTP::create($this->internal);
+        $tmp = TOTP::create($this->internal, clock: ApieLib::getPsrClock());
         $tmp->setLabel($label);
         return $tmp->getQrCodeUri(
             'https://api.qrserver.com/v1/create-qr-code/?data=[DATA]&size=300x300&ecc=M',
@@ -52,7 +53,7 @@ class TOTPSecret implements StringValueObjectInterface
     public function verify(OTP $otp): bool
     {
         // Use OTPHP library to generate a TOTP and compare it with the inputOTP
-        $totp = TOTP::create($this->internal);
+        $totp = TOTP::create($this->internal, clock: ApieLib::getPsrClock());
         return $totp->verify($otp->toNative());
     }
 }
