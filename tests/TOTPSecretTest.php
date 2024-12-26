@@ -11,9 +11,7 @@ use PHPUnit\Framework\TestCase;
 class TOTPSecretTest extends TestCase
 {
     use TestWithFaker;
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_create_and_verify_an_otp()
     {
         $clock = FrozenClock::withNowFrom(SystemClock::create());
@@ -25,9 +23,7 @@ class TOTPSecretTest extends TestCase
         $this->assertFalse($testItem->verify($otp));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_fake_totp_secrets()
     {
         $clock = FrozenClock::withNowFrom(SystemClock::create());
@@ -41,9 +37,7 @@ class TOTPSecretTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_provide_a_url_from_qrserver()
     {
         $clock = FrozenClock::withNowFrom(SystemClock::create());
@@ -56,9 +50,7 @@ class TOTPSecretTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_provide_a_base64_image()
     {
         $clock = FrozenClock::withNowFrom(SystemClock::create());

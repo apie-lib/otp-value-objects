@@ -10,9 +10,7 @@ use PHPUnit\Framework\TestCase;
 class HOTPSecretTest extends TestCase
 {
     use TestWithFaker;
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_create_and_verify_an_otp()
     {
         $testItem = HOTPSecret::createRandom();
@@ -24,10 +22,8 @@ class HOTPSecretTest extends TestCase
         $this->assertTrue($testItem->verify($newOtp));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_validate_input(array $expected, array $input)
     {
         try {
@@ -39,7 +35,7 @@ class HOTPSecretTest extends TestCase
         }
     }
 
-    public function invalidProvider()
+    public static function invalidProvider()
     {
         $validSecret = HOTPSecret::createRandom()->getSecret();
         yield 'empty array' => [
@@ -79,9 +75,7 @@ class HOTPSecretTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_fake_hotp_secrets()
     {
         $this->runFakerTest(
@@ -93,9 +87,7 @@ class HOTPSecretTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_provide_a_url_from_qrserver()
     {
         $secret = str_repeat('A', 103);
@@ -107,9 +99,7 @@ class HOTPSecretTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_provide_a_base64_image()
     {
         $secret = str_repeat('A', 103);
