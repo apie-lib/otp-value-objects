@@ -8,6 +8,7 @@ use Apie\Core\ValueObjects\CompositeValueObject;
 use Apie\Core\ValueObjects\Interfaces\ValueObjectInterface;
 use Apie\OtpValueObjects\Concerns\NoIndexing;
 use Apie\Serializer\Exceptions\ValidationException;
+use chillerlan\QRCode\QRCode;
 use OTPHP\HOTP;
 
 #[FakeMethod('createRandom')]
@@ -30,6 +31,33 @@ class HOTPSecret implements ValueObjectInterface
     public static function createRandom(): self
     {
         return new self(HOTP::create());
+    }
+
+    public function getSecret(): string
+    {
+        return $this->secret;
+    }
+
+    public function getCounter(): string
+    {
+        return $this->counter;
+    }
+
+    public function getUrl(string $label): string
+    {
+        $tmp = HOTP::create($this->secret, $this->counter);
+        $tmp->setLabel($label);
+        return (new QRCode)->render($tmp->getProvisioningUri());
+    }
+
+    public function getQrCodeUri(string $label): string
+    {
+        $tmp = HOTP::create($this->secret, $this->counter);
+        $tmp->setLabel($label);
+        return $tmp->getQrCodeUri(
+            'https://api.qrserver.com/v1/create-qr-code/?data=[DATA]&size=300x300&ecc=M',
+            '[DATA]'
+        );
     }
 
     private function validateState(): void

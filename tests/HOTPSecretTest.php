@@ -4,14 +4,13 @@ namespace Apie\Tests\OtpValueObjects;
 use Apie\Fixtures\TestHelpers\TestWithFaker;
 use Apie\OtpValueObjects\HOTPSecret;
 use Apie\Serializer\Exceptions\ValidationException;
+use OTPHP\HOTP;
 use PHPUnit\Framework\TestCase;
 
 class HOTPSecretTest extends TestCase
 {
     use TestWithFaker;
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_create_and_verify_an_otp()
     {
         $testItem = HOTPSecret::createRandom();
@@ -23,14 +22,11 @@ class HOTPSecretTest extends TestCase
         $this->assertTrue($testItem->verify($newOtp));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_validate_input(array $expected, array $input)
     {
         try {
-            var_dump($input);
             HOTPSecret::fromNative($input);
             $this->fail('fromNative should have thrown an exception');
         } catch (ValidationException $validationException) {
@@ -39,20 +35,47 @@ class HOTPSecretTest extends TestCase
         }
     }
 
-    public function invalidProvider()
+    public static function invalidProvider()
     {
-        $valid = HOTPSecret::createRandom()->toNative();
-        yield 'empty array' => [['counter' => 'Type "(missing value)" is not expected, expected int', 'secret' => 'Type "(missing value)" is not expected, expected string'], []];
-        yield 'counter negative' => [['counter' => 'Counter should higher than or equal to 0'], ['count' => -1, 'secret' => $valid]];
-        yield 'secret invalid' => [['secret' => 'Secret is not in valid format'], ['count' => 1, 'secret' => $valid]];
-        yield 'merging together gives more results then the timeline ' =>[
-            ['counter' => 'Counter should higher than or equal to 0', 'secret' => 'Secret is not in valid format'],
-            ['counter' => -1, 'secret' => $valid]];
+        $validSecret = HOTPSecret::createRandom()->getSecret();
+        yield 'empty array' => [
+            [
+                'counter' => 'Type "(missing value)" is not expected, expected int',
+                'secret' => 'Type "(missing value)" is not expected, expected string'
+            ],
+            []
+        ];
+        yield 'counter negative' => [
+            [
+                'counter' => 'Counter should higher than or equal to 0'
+            ],
+            [
+                'counter' => -1,
+                'secret' => $validSecret
+            ]
+        ];
+        yield 'secret invalid' => [
+            [
+                'secret' => 'Secret is not in valid format'
+            ],
+            [
+                'counter' => 1,
+                'secret' => 'invalid'
+            ]
+        ];
+        yield 'both values are incorrect' => [
+            [
+                'counter' => 'Counter should higher than or equal to 0',
+                'secret' => 'Secret is not in valid format'
+            ],
+            [
+                'counter' => -1,
+                'secret' => 'invalid'
+            ]
+        ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_fake_hotp_secrets()
     {
         $this->runFakerTest(
@@ -61,6 +84,31 @@ class HOTPSecretTest extends TestCase
                 $otp = $instance->createOTP();
                 $this->assertTrue($instance->verify($otp));
             }
+        );
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_can_provide_a_url_from_qrserver()
+    {
+        $secret = str_repeat('A', 103);
+        $tmp = HOTP::create($secret, 0);
+        $testItem = new HOTPSecret($tmp);
+        $this->assertEquals(
+            'https://api.qrserver.com/v1/create-qr-code/?data=otpauth%3A%2F%2Fhotp%2FTestcase%3Fcounter%3D0%26secret%3D' . $secret . '&size=300x300&ecc=M',
+            $testItem->getQrCodeUri('Testcase')
+        );
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function it_can_provide_a_base64_image()
+    {
+        $secret = str_repeat('A', 103);
+        $tmp = HOTP::create($secret, 0);
+        $testItem = new HOTPSecret($tmp);
+        $actual = $testItem->getUrl('Testcase');
+        $this->assertStringStartsWith(
+            'data:image/svg+xml;base64,',
+            $actual
         );
     }
 }
