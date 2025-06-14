@@ -1,6 +1,7 @@
 <?php
 namespace Apie\OtpValueObjects;
 
+use Apie\Core\Attributes\Description;
 use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\Entities\EntityInterface;
 use ReflectionProperty;
@@ -10,6 +11,7 @@ use ReflectionProperty;
  * and the label required to generate the QR Code.
  */
 #[ProvideIndex('noIndexing')]
+#[Description('One time password, used in combination with HOTP or TOTP')]
 abstract class VerifyOTP extends OTP
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Apie\OtpValueObjects;
 
+use Apie\Core\Attributes\Description;
 use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
 use Apie\Core\ValueObjects\IsStringWithRegexValueObject;

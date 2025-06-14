@@ -1,6 +1,7 @@
 <?php
 namespace Apie\OtpValueObjects;
 
+use Apie\Core\Attributes\Description;
 use Apie\Core\Attributes\FakeMethod;
 use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\Lists\StringHashmap;
@@ -13,6 +14,7 @@ use OTPHP\HOTP;
 
 #[FakeMethod('createRandom')]
 #[ProvideIndex('noIndexing')]
+#[Description('stores the HOTP secret encrypted. ')]
 class HOTPSecret implements ValueObjectInterface
 {
     use CompositeValueObject;

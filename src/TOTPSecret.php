@@ -2,6 +2,7 @@
 namespace Apie\OtpValueObjects;
 
 use Apie\Core\ApieLib;
+use Apie\Core\Attributes\Description;
 use Apie\Core\Attributes\FakeMethod;
 use Apie\Core\Attributes\ProvideIndex;
 use Apie\Core\ValueObjects\Interfaces\StringValueObjectInterface;
@@ -12,6 +13,7 @@ use OTPHP\TOTP;
 
 #[FakeMethod('createRandom')]
 #[ProvideIndex('noIndexing')]
+#[Description('A TOTP secret value')]
 class TOTPSecret implements StringValueObjectInterface
 {
     use IsStringWithRegexValueObject;
