@@ -28,7 +28,7 @@
   },
   "require-dev": {
     "apie/fixtures": "self.version",
-    "apie/service-provider-generator": "0.12.1",
+    "apie/service-provider-generator": "0.12.2",
     "beste/clock": "^3.0",
     "phpunit/phpunit": "^11.5.2",
     "phpspec/prophecy-phpunit": "^2.2"
