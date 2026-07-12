@@ -38,10 +38,10 @@
   },
   "extra": {
     "apie-objects": [
-      "Apie\\OtpValueObjects\\HOTPSecret",
-      "Apie\\OtpValueObjects\\OTP",
-      "Apie\\OtpValueObjects\\TOTPSecret"
-    ]
+    "Apie\\OtpValueObjects\\OTP",
+    "Apie\\OtpValueObjects\\HOTPSecret",
+    "Apie\\OtpValueObjects\\TOTPSecret"
+]
   },
   "minimum-stability": "dev",
   "prefer-stable": true
