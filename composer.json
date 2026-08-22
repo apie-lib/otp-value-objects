@@ -20,18 +20,18 @@
     }
   },
   "require": {
-    "php": ">=8.3",
+    "php": ">=8.4",
     "apie/core": "self.version",
     "apie/serializer": "self.version",
-    "chillerlan/php-qrcode": "^5.0.2",
-    "spomky-labs/otphp": "^11.3.0"
+    "chillerlan/php-qrcode": "^5.0.5",
+    "spomky-labs/otphp": "^11.5.0"
   },
   "require-dev": {
     "apie/fixtures": "self.version",
     "apie/service-provider-generator": "0.14.0",
     "beste/clock": "^3.0",
     "phpunit/phpunit": "^11.5.2",
-    "phpspec/prophecy-phpunit": "^2.2"
+    "phpspec/prophecy-phpunit": "^2.5"
   },
   "conflict": {
     "thecodingmachine/safe": "1.*"
